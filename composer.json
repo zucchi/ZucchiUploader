@@ -23,7 +23,7 @@
             "ZucchiUploader": "src/"
         },
         "classmap": [
-            "./"
+            "./Module.php"
         ]
     }
 }
