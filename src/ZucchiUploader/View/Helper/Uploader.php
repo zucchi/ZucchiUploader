@@ -8,7 +8,14 @@ use ZucchiUploader\Options\UploaderOptions;
 class Uploader extends AbstractHtmlElement
 {
     protected $options;
-    
+
+    /**
+     * @param $url
+     * @param array $attribs
+     * @param array $options
+     * @param array $events
+     * @return string
+     */
     public function __invoke($url, $attribs = array(), $options = array())
     {
         $view = $this->getView();
@@ -35,11 +42,28 @@ class Uploader extends AbstractHtmlElement
              ->appendScript(
                  "var uploader = new plupload.Uploader(" . $settings .");" . PHP_EOL .
                  "uploader.init();" . PHP_EOL .
-                 "uploader.bind('FilesAdded', function(up, files) { console.log('FileAdded');console.log(up);console.log(files); uploader.start(); });" . PHP_EOL .
-                 "uploader.bind('Error', function(up, args){ console.log('Error');console.log(up);console.log(args); });" . PHP_EOL .
-                 "uploader.bind('FileUploaded', function(up, file, info){ console.log('FileUploaded');console.log(up);console.log(file);console.log(info); });"
+                 "uploader.bind('FilesAdded', function(up, files) { uploader.start(); });" . PHP_EOL .
+                 "uploader.bind('Error', function(up, err){
+                    var file = err.file, message;
+                    if (file) {
+                        message = err.message;
+                        if (err.details) {message += ' (' + err.details + ')';}
+                        if (err.code == plupload.FILE_SIZE_ERROR) {alert(_('Error: File too large: ') + file.name);}
+                        if (err.code == plupload.FILE_EXTENSION_ERROR) {alert(_('Error: Invalid file extension: ') + file.name);}
+                    } 
+                 });" . PHP_EOL .
+                 "uploader.bind('FileUploaded', function(up, file, info){ 
+                     var data = JSON.parse(info.response);
+                     if  (!data.success) {
+                         var msgs = '';
+                         for (var i in data.messages) {
+                             msgs += data.messages[i] + \"\\n\";
+                         }
+                         alert(msgs);
+                     }
+                 });"
              );
-        
+
         $html = '<div id="' . $config->getContainer() . '">';
         
         $button = new Button($config->getBrowse_button());

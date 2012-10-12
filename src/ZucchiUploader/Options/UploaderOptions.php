@@ -52,7 +52,9 @@ class UploaderOptions extends AbstractOptions implements \JsonSerializable
     
     protected $required_features;
     
-    protected $headers;
+    protected $headers = array(
+        'Accept' => 'application/json',
+    );
     
     public function jsonSerialize()
     {
