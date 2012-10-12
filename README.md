@@ -1,8 +1,10 @@
-**ZucchiUploader**
+ZucchiUploader
+==============
 
-Module to provide integration of PLUploader
+Module to provide integration of PLUpload (http://www.plupload.com/)
 
-*Installation*
+Installation
+------------
 
 From the root of your ZF2 Skeleton Application run
 
@@ -11,3 +13,8 @@ From the root of your ZF2 Skeleton Application run
 This module will require your vhost to use an AliasMatch
 
     AliasMatch /_([^/]+)/(.+)/([^/]+) /path/to/vendor/$2/public/$1/$3
+
+Roadmap
+-------
+
+*    Create view helper to utilise Queue Widget
